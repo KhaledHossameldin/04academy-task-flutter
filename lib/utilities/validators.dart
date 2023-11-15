@@ -3,7 +3,7 @@ import 'extensions.dart';
 class Validators {
   // These two lines follow the Singleton design pattern as Validators will be
   // used across the application in case there is a register screen
-  static Validators instance = Validators._();
+  static final instance = Validators._();
   Validators._();
 
   // This function is used to validate Email Address anywhere in the entire

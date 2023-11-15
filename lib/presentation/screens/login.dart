@@ -19,10 +19,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  final _isHidden = ValueNotifier<bool>(false);
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _isHidden.value = false;
     super.dispose();
   }
 
@@ -49,12 +52,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               16.emptyHeight,
-              TextFormField(
-                controller: _passwordController,
-                validator: _validators.password,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  prefixIcon: Icon(Icons.lock),
+              ValueListenableBuilder(
+                valueListenable: _isHidden,
+                builder: (context, value, child) => TextFormField(
+                  controller: _passwordController,
+                  validator: _validators.password,
+                  obscureText: value,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: const Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      onPressed: () => _isHidden.value = !_isHidden.value,
+                      icon: Icon(
+                        value ? Icons.visibility_off : Icons.visibility,
+                      ),
+                    ),
+                  ),
                 ),
               ),
               32.emptyHeight,
