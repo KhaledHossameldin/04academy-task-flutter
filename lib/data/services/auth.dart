@@ -17,4 +17,6 @@ class AuthenticationService {
     }
     return _auth.currentUser!.uid;
   }
+
+  Future<void> logout() async => await _auth.signOut();
 }

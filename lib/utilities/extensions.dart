@@ -10,6 +10,7 @@ extension NullableStringExtension on String? {
 
 extension NumExtension on num {
   SizedBox get emptyHeight => SizedBox(height: toDouble());
+  SizedBox get emptyWidth => SizedBox(width: toDouble());
 }
 
 extension StringExtension on String {

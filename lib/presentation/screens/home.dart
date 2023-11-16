@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../constants/routes.dart';
+import '../../cubits/cubit/logout_cubit.dart';
 import '../../cubits/notifications/notifications_cubit.dart';
 import '../../cubits/user_data/user_data_cubit.dart';
 import '../../data/enums/user_role.dart';
@@ -18,7 +20,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _validators = Validators.instance;
 
   final _titleController = TextEditingController();
   final _bodyController = TextEditingController();
@@ -71,14 +72,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     _NotificationForm(
                       formKey: _formKey,
                       titleController: _titleController,
-                      validators: _validators,
                       bodyController: _bodyController,
                     ),
                     32.emptyHeight,
-                    _SendNotificationButton(
-                      formKey: _formKey,
-                      titleController: _titleController,
-                      bodyController: _bodyController,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: _SendNotificationButton(
+                              formKey: _formKey,
+                              titleController: _titleController,
+                              bodyController: _bodyController,
+                            ),
+                          ),
+                          16.emptyWidth,
+                          Expanded(
+                            flex: 2,
+                            child: _LogoutButton(),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -99,32 +114,72 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class _NotificationForm extends StatelessWidget {
-  const _NotificationForm({
-    required GlobalKey<FormState> formKey,
-    required TextEditingController titleController,
-    required Validators validators,
-    required TextEditingController bodyController,
-  })  : _formKey = formKey,
-        _titleController = titleController,
-        _validators = validators,
-        _bodyController = bodyController;
+class _LogoutButton extends StatelessWidget {
+  _LogoutButton();
 
-  final GlobalKey<FormState> _formKey;
-  final TextEditingController _titleController;
-  final Validators _validators;
-  final TextEditingController _bodyController;
+  final _routes = Routes.instance;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<LogoutCubit, LogoutState>(
+      listener: (context, state) {
+        if (state is LogoutLoaded) {
+          Navigator.pushReplacementNamed(context, _routes.login);
+          return;
+        }
+        if (state is LogoutError) {
+          state.message.showSnackbar(context, isError: true);
+          return;
+        }
+      },
+      builder: (context, state) {
+        return ElevatedButton.icon(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+          ),
+          // This line means it will access the LogoutCubit and the logout
+          // method which will emit LogoutLoading and display a loading
+          // animation and send an HTTP request to Firebase
+          onPressed: () => context.read<LogoutCubit>().logout(),
+          icon: const Icon(Icons.logout),
+          // This line means if the state is loading (aka the request
+          // is still working) display a loading animation otherwise
+          // display the normal text (Logout)
+          label: state is LogoutLoading
+              ? const CircularProgressIndicator.adaptive(
+                  backgroundColor: Colors.white,
+                )
+              : const Text('Logout'),
+        );
+      },
+    );
+  }
+}
+
+class _NotificationForm extends StatelessWidget {
+  _NotificationForm({
+    required this.formKey,
+    required this.titleController,
+    required this.bodyController,
+  });
+
+  final GlobalKey<FormState> formKey;
+  final TextEditingController titleController;
+  final TextEditingController bodyController;
+
+  final _validators = Validators.instance;
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
+      key: formKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
             TextFormField(
-              controller: _titleController,
+              controller: titleController,
               validator: _validators.notificationTitle,
               decoration: const InputDecoration(
                 labelText: 'Title',
@@ -133,7 +188,7 @@ class _NotificationForm extends StatelessWidget {
             ),
             8.emptyHeight,
             TextFormField(
-              controller: _bodyController,
+              controller: bodyController,
               validator: _validators.notificationBody,
               decoration: const InputDecoration(
                 labelText: 'Body',
@@ -149,16 +204,14 @@ class _NotificationForm extends StatelessWidget {
 
 class _SendNotificationButton extends StatelessWidget {
   const _SendNotificationButton({
-    required GlobalKey<FormState> formKey,
-    required TextEditingController titleController,
-    required TextEditingController bodyController,
-  })  : _formKey = formKey,
-        _titleController = titleController,
-        _bodyController = bodyController;
+    required this.formKey,
+    required this.titleController,
+    required this.bodyController,
+  });
 
-  final GlobalKey<FormState> _formKey;
-  final TextEditingController _titleController;
-  final TextEditingController _bodyController;
+  final GlobalKey<FormState> formKey;
+  final TextEditingController titleController;
+  final TextEditingController bodyController;
 
   @override
   Widget build(BuildContext context) {
@@ -172,14 +225,21 @@ class _SendNotificationButton extends StatelessWidget {
         return ElevatedButton(
           onPressed: () {
             if (state is NotificationsLoading) return;
-            final isValid = _formKey.currentState?.validate() ?? false;
+            final isValid = formKey.currentState?.validate() ?? false;
             if (isValid) {
+              // This line means it will access the NotificationsCubit and call
+              // the send method which will emit NotificationsLoading and
+              // display a loading animation and send an HTTP request to
+              // Firebase
               context.read<NotificationsCubit>().send(
-                    title: _titleController.text,
-                    body: _bodyController.text,
+                    title: titleController.text,
+                    body: bodyController.text,
                   );
             }
           },
+          // This line means if the state is loading (aka the request is still
+          // working) display a loading animation otherwise display the normal
+          // text (Send Notification)
           child: state is NotificationsLoading
               ? const CircularProgressIndicator.adaptive()
               : const Text('Send Notification'),
