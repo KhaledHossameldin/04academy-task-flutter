@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyC7NTR5ywtmPcvOmlW62fK9hEmlR-_rqvg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>222233456923</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.zerofourAcademyTask</string>
+	<key>PROJECT_ID</key>
+	<string>zerofour-academy-task</string>
+	<key>STORAGE_BUCKET</key>
+	<string>zerofour-academy-task.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:222233456923:ios:1568904b22d27cac12e3be</string>
+</dict>
+</plist>

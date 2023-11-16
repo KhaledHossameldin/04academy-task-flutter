@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "222233456923",
+    "project_id": "zerofour-academy-task",
+    "storage_bucket": "zerofour-academy-task.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:222233456923:android:21dae006fa8dc10112e3be",
+        "android_client_info": {
+          "package_name": "com.example.zerofour_academy_task"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJDbr5KB34Rbhr3sEZnz-dkTfRYmqrppM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
