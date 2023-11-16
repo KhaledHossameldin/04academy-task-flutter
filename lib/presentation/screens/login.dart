@@ -14,6 +14,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _routes = Routes.instance;
+
   final _formKey = GlobalKey<FormState>();
   final _validators = Validators.instance;
 
@@ -26,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-    _isHidden.value = false;
+    _isHidden.dispose();
     super.dispose();
   }
 
@@ -52,6 +54,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               16.emptyHeight,
+              // ValueListenableBuilder is a special widget that is used to
+              // re-render what is inside it only when the value of the assigned
+              // ValueNotifier changes.
+              // I have used it here as changing visibility of password will not
+              // affect anthing but the password textfield so it will lead to
+              // better performance if I re-render the password textfield only
               ValueListenableBuilder(
                 valueListenable: _isHidden,
                 builder: (context, value, child) => TextFormField(
@@ -74,7 +82,10 @@ class _LoginScreenState extends State<LoginScreen> {
               BlocConsumer<LoginCubit, LoginState>(
                 listener: (context, state) {
                   if (state is LoginLoaded) {
-                    Navigator.pushReplacementNamed(context, HOME_SCREEN_ROUTE);
+                    // I can also add the returned user to the LoginLoaded class
+                    // and based on the user role I can navigate to a different
+                    // screen
+                    Navigator.pushReplacementNamed(context, _routes.home);
                     return;
                   }
                   if (state is LoginError) {
@@ -100,7 +111,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
                     },
                     // This line means if the state is loading (aka the request
-                    //is still working) display a loading animation
+                    // is still working) display a loading animation otherwise
+                    // display teh normal text (Login)
                     child: state is LoginLoading
                         ? const CircularProgressIndicator.adaptive()
                         : const Text('Login'),

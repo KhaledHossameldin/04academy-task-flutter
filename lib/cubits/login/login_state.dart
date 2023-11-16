@@ -1,5 +1,6 @@
 part of 'login_cubit.dart';
 
+// These are all the states related to logging in request
 @immutable
 sealed class LoginState {
   const LoginState();

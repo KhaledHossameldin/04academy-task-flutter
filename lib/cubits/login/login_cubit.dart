@@ -8,7 +8,7 @@ import '../../utilities/extensions.dart';
 part 'login_state.dart';
 
 /// This cubit handles all login logic only by emitting states which translates
-/// in the UI as login animation and navigating to HomeScreen when the request
+/// in the UI as loading animation and navigating to HomeScreen when the request
 /// is done
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(const LoginInitial());

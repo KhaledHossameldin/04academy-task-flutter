@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'constants/routes.dart';
 import 'firebase_options.dart';
-import 'presentation/screens/app_router.dart';
+import 'presentation/app_router.dart';
 
 void main() async {
   // This line is added to ensure that the Flutter framework and the host
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // This variable hass all the standard themes in the entire application
+    // This variable has all the standard themes in the entire application
     final themeData = ThemeData(
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       useMaterial3: true,
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: '04Academy Task',
       theme: themeData,
-      initialRoute: LOGIN_SCREEN_ROUTE,
+      initialRoute: Routes.instance.login,
       onGenerateRoute: AppRouter().onGenerateRoute,
     );
   }
