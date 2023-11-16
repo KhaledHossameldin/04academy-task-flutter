@@ -1,5 +1,7 @@
 import 'extensions.dart';
 
+/// This class only handles validating text fields and combined with a form
+///  inputs it creates a robust form validation
 class Validators {
   // These two lines follow the Singleton design pattern as Validators will be
   // used across the application in case there is a register screen

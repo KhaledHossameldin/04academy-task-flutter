@@ -1,7 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../constants/routes.dart';
+import '../../cubits/login/login_cubit.dart';
 import '../../utilities/extensions.dart';
 import '../../utilities/validators.dart';
 
@@ -32,7 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
       // The login form which includes an email textfield, a password
       // textfield and a submit button which all use Validators classes to
       // validate their values
@@ -71,14 +71,41 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               32.emptyHeight,
-              ElevatedButton(
-                onPressed: () {
-                  final isValid = _formKey.currentState?.validate() ?? false;
-                  if (isValid) {
-                    log({'email': _emailController.text}.toString());
+              BlocConsumer<LoginCubit, LoginState>(
+                listener: (context, state) {
+                  if (state is LoginLoaded) {
+                    Navigator.pushReplacementNamed(context, HOME_SCREEN_ROUTE);
+                    return;
+                  }
+                  if (state is LoginError) {
+                    state.message.showSnackbar(context, isError: true);
+                    return;
                   }
                 },
-                child: const Text('Login'),
+                builder: (context, state) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      if (state is LoginLoading) return;
+                      final isValid =
+                          _formKey.currentState?.validate() ?? false;
+                      if (isValid) {
+                        // This line means it will access the LoginCubit and
+                        // call the login method which will emit LoginLoading
+                        // and display a loading animation and send an HTTP
+                        // request to Firebase
+                        context.read<LoginCubit>().login(
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                            );
+                      }
+                    },
+                    // This line means if the state is loading (aka the request
+                    //is still working) display a loading animation
+                    child: state is LoginLoading
+                        ? const CircularProgressIndicator.adaptive()
+                        : const Text('Login'),
+                  );
+                },
               ),
             ],
           ),
