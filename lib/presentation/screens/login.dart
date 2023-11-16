@@ -176,7 +176,7 @@ class _LoginButton extends StatelessWidget {
           },
           // This line means if the state is loading (aka the request
           // is still working) display a loading animation otherwise
-          // display teh normal text (Login)
+          // display the normal text (Login)
           child: state is LoginLoading
               ? const CircularProgressIndicator.adaptive()
               : const Text('Login'),

@@ -25,6 +25,8 @@ class Repository {
   Future<void> login({required String email, required String password}) async =>
       await _auth.login(email: email, password: password);
 
+  Future<void> logout() async => await _auth.logout();
+
   // Firestore Services
   Future<UserData> getUserData() async {
     final uid = _auth.getUserUid();

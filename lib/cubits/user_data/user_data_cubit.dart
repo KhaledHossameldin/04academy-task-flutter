@@ -6,18 +6,18 @@ import '../../data/services/repository.dart';
 
 part 'user_data_state.dart';
 
-// This cubit handles fetching user data logic only by emitting states which
-// translates in the UI as loading animation and displaying the fetched data in
-// the HomeScreen or any screen needed when the request is done
+/// This cubit handles fetching user data logic only by emitting states which
+/// translates in the UI as loading animation and displaying the fetched data in
+/// the HomeScreen or any screen needed when the request is done
 class UserDataCubit extends Cubit<UserDataState> {
   UserDataCubit() : super(const UserDataInitial());
 
-  final repository = Repository.instance;
+  final _repository = Repository.instance;
 
   Future<void> fetch() async {
     try {
       emit(const UserDataLoading());
-      final data = await repository.getUserData();
+      final data = await _repository.getUserData();
       emit(UserDataLoaded(data));
     } catch (e) {
       emit(UserDataError('$e'));

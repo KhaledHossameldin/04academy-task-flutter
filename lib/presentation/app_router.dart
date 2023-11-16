@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../constants/routes.dart';
+import '../cubits/cubit/logout_cubit.dart';
 import '../cubits/login/login_cubit.dart';
 import '../cubits/notifications/notifications_cubit.dart';
 import '../cubits/user_data/user_data_cubit.dart';
@@ -28,6 +29,7 @@ class AppRouter {
           providers: [
             BlocProvider(create: (context) => UserDataCubit()),
             BlocProvider(create: (context) => NotificationsCubit()),
+            BlocProvider(create: (context) => LogoutCubit()),
           ],
           child: const HomeScreen(),
         ),
