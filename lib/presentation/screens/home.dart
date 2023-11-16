@@ -68,58 +68,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: textTheme.headlineSmall,
                     ),
                     32.emptyHeight,
-                    Form(
-                      key: _formKey,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              controller: _titleController,
-                              validator: _validators.notificationTitle,
-                              decoration: const InputDecoration(
-                                labelText: 'Title',
-                                prefixIcon: Icon(Icons.notifications),
-                              ),
-                            ),
-                            8.emptyHeight,
-                            TextFormField(
-                              controller: _bodyController,
-                              validator: _validators.notificationBody,
-                              decoration: const InputDecoration(
-                                labelText: 'Body',
-                                prefixIcon: Icon(Icons.notifications),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                    _NotificationForm(
+                      formKey: _formKey,
+                      titleController: _titleController,
+                      validators: _validators,
+                      bodyController: _bodyController,
                     ),
                     32.emptyHeight,
-                    BlocConsumer<NotificationsCubit, NotificationsState>(
-                      listener: (context, state) {
-                        if (state is NotificationsError) {
-                          state.message.showSnackbar(context, isError: true);
-                        }
-                      },
-                      builder: (context, state) {
-                        return ElevatedButton(
-                          onPressed: () {
-                            if (state is NotificationsLoading) return;
-                            final isValid =
-                                _formKey.currentState?.validate() ?? false;
-                            if (isValid) {
-                              context.read<NotificationsCubit>().send(
-                                    title: _titleController.text,
-                                    body: _bodyController.text,
-                                  );
-                            }
-                          },
-                          child: state is NotificationsLoading
-                              ? const CircularProgressIndicator.adaptive()
-                              : const Text('Send Notification'),
-                        );
-                      },
+                    _SendNotificationButton(
+                      formKey: _formKey,
+                      titleController: _titleController,
+                      bodyController: _bodyController,
                     ),
                   ],
                 ),
@@ -136,6 +95,96 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
       ),
+    );
+  }
+}
+
+class _NotificationForm extends StatelessWidget {
+  const _NotificationForm({
+    required GlobalKey<FormState> formKey,
+    required TextEditingController titleController,
+    required Validators validators,
+    required TextEditingController bodyController,
+  })  : _formKey = formKey,
+        _titleController = titleController,
+        _validators = validators,
+        _bodyController = bodyController;
+
+  final GlobalKey<FormState> _formKey;
+  final TextEditingController _titleController;
+  final Validators _validators;
+  final TextEditingController _bodyController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: [
+            TextFormField(
+              controller: _titleController,
+              validator: _validators.notificationTitle,
+              decoration: const InputDecoration(
+                labelText: 'Title',
+                prefixIcon: Icon(Icons.notifications),
+              ),
+            ),
+            8.emptyHeight,
+            TextFormField(
+              controller: _bodyController,
+              validator: _validators.notificationBody,
+              decoration: const InputDecoration(
+                labelText: 'Body',
+                prefixIcon: Icon(Icons.notifications),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SendNotificationButton extends StatelessWidget {
+  const _SendNotificationButton({
+    required GlobalKey<FormState> formKey,
+    required TextEditingController titleController,
+    required TextEditingController bodyController,
+  })  : _formKey = formKey,
+        _titleController = titleController,
+        _bodyController = bodyController;
+
+  final GlobalKey<FormState> _formKey;
+  final TextEditingController _titleController;
+  final TextEditingController _bodyController;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<NotificationsCubit, NotificationsState>(
+      listener: (context, state) {
+        if (state is NotificationsError) {
+          state.message.showSnackbar(context, isError: true);
+        }
+      },
+      builder: (context, state) {
+        return ElevatedButton(
+          onPressed: () {
+            if (state is NotificationsLoading) return;
+            final isValid = _formKey.currentState?.validate() ?? false;
+            if (isValid) {
+              context.read<NotificationsCubit>().send(
+                    title: _titleController.text,
+                    body: _bodyController.text,
+                  );
+            }
+          },
+          child: state is NotificationsLoading
+              ? const CircularProgressIndicator.adaptive()
+              : const Text('Send Notification'),
+        );
+      },
     );
   }
 }
