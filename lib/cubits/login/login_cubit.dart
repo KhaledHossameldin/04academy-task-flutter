@@ -13,12 +13,12 @@ part 'login_state.dart';
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(const LoginInitial());
 
-  final repository = Repository.instance;
+  final _repository = Repository.instance;
 
   Future<void> login({required String email, required String password}) async {
     try {
       emit(const LoginLoading());
-      await repository.login(email: email, password: password);
+      await _repository.login(email: email, password: password);
       emit(const LoginLoaded());
     } on FirebaseAuthException catch (e) {
       emit(LoginError(e.code.authError));
