@@ -1,6 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+/// This class handles all notification logic only and will not be called
+/// anywhere except in the Repository class
 class NotificationsService {
   static final instance = NotificationsService._();
   NotificationsService._();
@@ -29,6 +31,14 @@ class NotificationsService {
         android: AndroidInitializationSettings('@mipmap/ic_launcher'),
       ),
     );
+  }
+
+  Future<String> getToken() async {
+    final token = await _firebase.getToken();
+    if (token == null) {
+      throw Exception('No FirebaseMessaging token is saved');
+    }
+    return token;
   }
 
   void onMessage(RemoteMessage message) {
