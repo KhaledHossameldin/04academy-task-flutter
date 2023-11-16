@@ -39,4 +39,18 @@ class Validators {
     // For example if password needs to include a capital letter
     return null;
   }
+
+  String? notificationTitle(String? title) {
+    if (title.isNullOrEmpty) {
+      return 'Must enter a titile for the notification';
+    }
+    return null;
+  }
+
+  String? notificationBody(String? body) {
+    if (body.isNullOrEmpty) {
+      return 'Must enter a body for the notification';
+    }
+    return null;
+  }
 }

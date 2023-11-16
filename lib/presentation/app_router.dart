@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../constants/routes.dart';
 import '../cubits/login/login_cubit.dart';
+import '../cubits/notifications/notifications_cubit.dart';
 import '../cubits/user_data/user_data_cubit.dart';
 import 'screens/home.dart';
 import 'screens/login.dart';
@@ -23,8 +24,11 @@ class AppRouter {
 
     if (settings.name == _routes.home) {
       return MaterialPageRoute(
-        builder: (context) => BlocProvider(
-          create: (context) => UserDataCubit(),
+        builder: (context) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => UserDataCubit()),
+            BlocProvider(create: (context) => NotificationsCubit()),
+          ],
           child: const HomeScreen(),
         ),
       );

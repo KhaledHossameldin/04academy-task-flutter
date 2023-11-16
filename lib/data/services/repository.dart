@@ -1,6 +1,8 @@
 import '../models/user_data.dart';
 import 'auth.dart';
 import 'firestore.dart';
+import 'network.dart';
+import 'notifications.dart';
 
 /// This class collects all handlers of all services and this class will be the
 /// only service class one to be called to handle logic from the screens
@@ -16,6 +18,8 @@ class Repository {
 
   final _auth = AuthenticationService.instance;
   final _firestore = FirestoreService.instance;
+  final _notifications = NotificationsService.instance;
+  final _network = NetworkService.instance;
 
   // Authentication Services
   Future<void> login({required String email, required String password}) async =>
@@ -25,5 +29,17 @@ class Repository {
   Future<UserData> getUserData() async {
     final uid = _auth.getUserUid();
     return _firestore.getUserData(uid: uid);
+  }
+
+  // Notifications Services
+  Future<void> initNotifications() async => await _notifications.init();
+
+  // Network Services
+  Future<void> sendNotification({
+    required String title,
+    required String body,
+  }) async {
+    final token = await _notifications.getToken();
+    await _network.sendNotification(token: token, title: title, body: body);
   }
 }
