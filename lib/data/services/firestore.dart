@@ -53,4 +53,9 @@ class FirestoreService {
     final docs = await _collection.where('email', isEqualTo: email).get();
     await _collection.doc(docs.docs[0].id).update(userData.toMap());
   }
+
+  Future<void> deleteUser(String email) async {
+    final docs = await _collection.where('email', isEqualTo: email).get();
+    await _collection.doc(docs.docs[0].id).delete();
+  }
 }

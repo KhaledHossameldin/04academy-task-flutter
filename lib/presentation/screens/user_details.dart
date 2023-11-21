@@ -119,19 +119,43 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                   }
                 },
                 builder: (context, state) {
-                  return ElevatedButton(
-                    onPressed: () {
-                      final isValid =
-                          _formKey.currentState?.validate() ?? false;
-                      if (isValid) {
-                        handleUser();
-                      }
-                    },
-                    child: state is UserDetailsLoading
-                        ? const CircularProgressIndicator.adaptive()
-                        : Text(
-                            '${widget.userData == null ? 'Add' : 'Update'} User',
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            final isValid =
+                                _formKey.currentState?.validate() ?? false;
+                            if (isValid) {
+                              handleUser();
+                            }
+                          },
+                          child: state is UserDetailsLoading
+                              ? const CircularProgressIndicator.adaptive()
+                              : Text(
+                                  '${widget.userData == null ? 'Add' : 'Update'} User',
+                                ),
+                        ),
+                      ),
+                      if (widget.userData != null) 16.emptyWidth,
+                      if (widget.userData != null)
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              foregroundColor: Colors.white,
+                            ),
+                            onPressed: () {
+                              context.read<UserDetailsCubit>().deleteUser(
+                                    widget.userData!.email,
+                                  );
+                            },
+                            child: state is UserDetailsDeleting
+                                ? const CircularProgressIndicator.adaptive()
+                                : const Text('Delete User'),
                           ),
+                        ),
+                    ],
                   );
                 },
               ),

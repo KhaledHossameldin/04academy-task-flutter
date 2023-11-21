@@ -30,4 +30,14 @@ class UserDetailsCubit extends Cubit<UserDetailsState> {
       emit(UserDetailsError('$e'));
     }
   }
+
+  Future<void> deleteUser(String email) async {
+    try {
+      emit(const UserDetailsDeleting());
+      await repository.deleteUser(email);
+      emit(const UserDetailsLoaded());
+    } catch (e) {
+      emit(UserDetailsError('$e'));
+    }
+  }
 }

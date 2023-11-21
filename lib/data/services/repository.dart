@@ -31,6 +31,8 @@ class Repository {
   Future<void> updateUser(UserData userData, String email) async =>
       _firestore.updateUser(userData, email);
 
+  Future<void> deleteUser(String email) async => _firestore.deleteUser(email);
+
   // Notifications Services
   Future<void> initNotifications() async => await _notifications.init();
 

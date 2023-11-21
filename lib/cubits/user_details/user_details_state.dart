@@ -13,6 +13,10 @@ final class UserDetailsLoading extends UserDetailsState {
   const UserDetailsLoading();
 }
 
+final class UserDetailsDeleting extends UserDetailsState {
+  const UserDetailsDeleting();
+}
+
 final class UserDetailsLoaded extends UserDetailsState {
   const UserDetailsLoaded();
 }
