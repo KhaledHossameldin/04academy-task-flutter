@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'constants/routes.dart';
 import 'cubits/login/login_cubit.dart';
 import 'data/services/repository.dart';
@@ -13,6 +14,8 @@ void main() async {
   // platform (Android or iOS) are binded to avoid any pottential errors in the
   // future
   WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load();
 
   // This line sets orientation options to portrait only as I do not have a
   //design and I am not that good in UI/UX so I set it to portrait only
