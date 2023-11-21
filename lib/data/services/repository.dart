@@ -1,5 +1,4 @@
 import '../models/user_data.dart';
-import 'auth.dart';
 import 'firestore.dart';
 import 'network.dart';
 import 'notifications.dart';
@@ -16,13 +15,9 @@ class Repository {
   static final instance = Repository._();
   Repository._();
 
-  final _auth = AuthenticationService.instance;
   final _firestore = FirestoreService.instance;
   final _notifications = NotificationsService.instance;
   final _network = NetworkService.instance;
-
-  // Authentication Services
-  Future<void> logout() async => await _auth.logout();
 
   // Firestore Services
   Future<UserData> login({

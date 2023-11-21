@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../constants/routes.dart';
 import '../../cubits/login/login_cubit.dart';
 import '../../cubits/notifications/notifications_cubit.dart';
 import '../../utilities/extensions.dart';
@@ -45,8 +46,50 @@ class _UserScreenState extends State<UserScreen> {
               titleController: _titleController,
               bodyController: _bodyController,
             ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: _SendNotificationButton(
+                    formKey: _formKey,
+                    titleController: _titleController,
+                    bodyController: _bodyController,
+                  )),
+                  16.emptyWidth,
+                  const Expanded(child: _LogoutButton()),
+                ],
+              ),
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _LogoutButton extends StatelessWidget {
+  const _LogoutButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<LoginCubit, LoginState>(
+      listener: (context, state) {
+        if (state is LoginInitial) {
+          Navigator.pushReplacementNamed(
+            context,
+            Routes.instance.login,
+          );
+        }
+      },
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
+        ),
+        onPressed: () => context.read<LoginCubit>().logout(),
+        icon: const Icon(Icons.logout),
+        label: const Text('Logout'),
       ),
     );
   }
@@ -89,12 +132,6 @@ class _NotificationForm extends StatelessWidget {
                 labelText: 'Body',
                 prefixIcon: Icon(Icons.notifications),
               ),
-            ),
-            16.emptyHeight,
-            _SendNotificationButton(
-              formKey: formKey,
-              titleController: titleController,
-              bodyController: bodyController,
             ),
           ],
         ),

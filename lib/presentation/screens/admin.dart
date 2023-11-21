@@ -47,6 +47,20 @@ class _AdminScreenState extends State<AdminScreen> {
             },
             icon: const Icon(Icons.add),
           ),
+          BlocListener<LoginCubit, LoginState>(
+            listener: (context, state) {
+              if (state is LoginInitial) {
+                Navigator.pushReplacementNamed(
+                  context,
+                  Routes.instance.login,
+                );
+              }
+            },
+            child: IconButton(
+              onPressed: () => context.read<LoginCubit>().logout(),
+              icon: const Icon(Icons.logout),
+            ),
+          ),
         ],
       ),
       body: BlocBuilder<UsersCubit, UsersState>(

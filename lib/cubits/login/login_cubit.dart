@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
 import '../../data/models/user_data.dart';
@@ -28,10 +27,12 @@ class LoginCubit extends Cubit<LoginState> {
       emit(const LoginLoading());
       final data = await _repository.login(email: email, password: password);
       emit(LoginLoaded(data));
-    } on FirebaseException catch (e) {
-      emit(LoginError(e.message ?? 'Unknown error has occured'));
     } catch (e) {
       emit(LoginError('$e'));
     }
+  }
+
+  Future<void> logout() async {
+    emit(const LoginInitial());
   }
 }
