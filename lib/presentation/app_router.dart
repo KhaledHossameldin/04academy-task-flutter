@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../constants/routes.dart';
+import '../cubits/notifications/notifications_cubit.dart';
 import '../cubits/user_details/user_details_cubit.dart';
 import '../cubits/users/users_cubit.dart';
 import '../data/models/user_data.dart';
@@ -21,7 +22,10 @@ class AppRouter {
 
     if (settings.name == _routes.user) {
       return MaterialPageRoute(
-        builder: (context) => const UserScreen(),
+        builder: (context) => BlocProvider(
+          create: (context) => NotificationsCubit(),
+          child: const UserScreen(),
+        ),
       );
     }
 
