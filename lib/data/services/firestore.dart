@@ -17,4 +17,19 @@ class FirestoreService {
     }
     return UserData.fromMap(result.data()!);
   }
+
+  Future<UserData> login({
+    required String email,
+    required String password,
+  }) async {
+    final result = await _firestore
+        .collection('users')
+        .where(Filter.and(Filter('email', isEqualTo: email),
+            Filter('password', isEqualTo: password)))
+        .get();
+    if (result.docs.isEmpty) {
+      throw 'There are no accounts with this email';
+    }
+    return UserData.fromMap(result.docs[0].data());
+  }
 }

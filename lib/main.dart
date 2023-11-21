@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'constants/routes.dart';
+import 'cubits/login/login_cubit.dart';
 import 'data/services/repository.dart';
 import 'firebase_options.dart';
 import 'presentation/app_router.dart';
@@ -49,12 +51,15 @@ class _MyAppState extends State<MyApp> {
         border: OutlineInputBorder(),
       ),
     );
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: '04Academy Task',
-      theme: themeData,
-      initialRoute: Routes.instance.login,
-      onGenerateRoute: AppRouter().onGenerateRoute,
+    return BlocProvider(
+      create: (context) => LoginCubit(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: '04Academy Task',
+        theme: themeData,
+        initialRoute: Routes.instance.login,
+        onGenerateRoute: AppRouter().onGenerateRoute,
+      ),
     );
   }
 }

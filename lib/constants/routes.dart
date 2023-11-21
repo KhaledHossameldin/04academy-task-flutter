@@ -8,5 +8,6 @@ class Routes {
   Routes._();
 
   final login = '/login-screen';
-  final home = '/home-screen';
+  final user = '/user-screen';
+  final admin = '/admin-screen';
 }

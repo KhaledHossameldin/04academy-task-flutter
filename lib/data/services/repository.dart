@@ -22,16 +22,14 @@ class Repository {
   final _network = NetworkService.instance;
 
   // Authentication Services
-  Future<void> login({required String email, required String password}) async =>
-      await _auth.login(email: email, password: password);
-
   Future<void> logout() async => await _auth.logout();
 
   // Firestore Services
-  Future<UserData> getUserData() async {
-    final uid = _auth.getUserUid();
-    return _firestore.getUserData(uid: uid);
-  }
+  Future<UserData> login({
+    required String email,
+    required String password,
+  }) async =>
+      await _firestore.login(email: email, password: password);
 
   // Notifications Services
   Future<void> initNotifications() async => await _notifications.init();
