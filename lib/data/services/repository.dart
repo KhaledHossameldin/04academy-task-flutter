@@ -42,4 +42,7 @@ class Repository {
     final token = await _notifications.getToken();
     await _network.sendNotification(token: token, title: title, body: body);
   }
+
+  Future<List<UserData>> getUsers({bool withAdmins = false}) async =>
+      _firestore.getUsers(withAdmins: withAdmins);
 }

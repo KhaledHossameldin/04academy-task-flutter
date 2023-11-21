@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../constants/routes.dart';
+import '../cubits/users/users_cubit.dart';
 import 'screens/admin.dart';
 import 'screens/user.dart';
 import 'screens/login.dart';
@@ -22,7 +24,10 @@ class AppRouter {
 
     if (settings.name == _routes.admin) {
       return MaterialPageRoute(
-        builder: (context) => const AdminScreen(),
+        builder: (context) => BlocProvider(
+          create: (context) => UsersCubit(),
+          child: const AdminScreen(),
+        ),
       );
     }
 
