@@ -5,30 +5,30 @@ import '../enums/user_role.dart';
 /// converting it to a string or comparing it to another object easily and many
 /// other operations.
 class UserData {
-  final int id;
   final String email;
+  final String password;
   final bool isSuperAdmin;
   final String name;
   final UserRole role;
 
   UserData({
-    required this.id,
     required this.email,
-    required this.isSuperAdmin,
+    required this.password,
+    this.isSuperAdmin = false,
     required this.name,
     required this.role,
   });
 
   UserData copyWith({
-    int? id,
     String? email,
+    String? password,
     bool? isSuperAdmin,
     String? name,
     UserRole? role,
   }) {
     return UserData(
-      id: id ?? this.id,
       email: email ?? this.email,
+      password: password ?? this.password,
       isSuperAdmin: isSuperAdmin ?? this.isSuperAdmin,
       name: name ?? this.name,
       role: role ?? this.role,
@@ -38,7 +38,7 @@ class UserData {
   factory UserData.fromMap(Map<String, dynamic> map) {
     final contract = Contracts.instance;
     return UserData(
-      id: map[contract.id]?.toInt() ?? 0,
+      password: map[contract.password] ?? '',
       email: map[contract.email] ?? '',
       isSuperAdmin: map[contract.isSuperAdmin] ?? false,
       name: map[contract.name] ?? '',
@@ -46,9 +46,20 @@ class UserData {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    final contract = Contracts.instance;
+    return {
+      contract.email: email,
+      contract.password: password,
+      contract.isSuperAdmin: isSuperAdmin,
+      contract.name: name,
+      contract.role: role.name,
+    };
+  }
+
   @override
   String toString() {
-    return 'UserData(id: $id, email: $email, isSuperAdmin: $isSuperAdmin, name: $name, role: $role)';
+    return 'UserData(email: $email, password: $password, isSuperAdmin: $isSuperAdmin, name: $name, role: $role)';
   }
 
   @override
@@ -56,8 +67,8 @@ class UserData {
     if (identical(this, other)) return true;
 
     return other is UserData &&
-        other.id == id &&
         other.email == email &&
+        other.password == password &&
         other.isSuperAdmin == isSuperAdmin &&
         other.name == name &&
         other.role == role;
@@ -65,8 +76,8 @@ class UserData {
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        email.hashCode ^
+    return email.hashCode ^
+        password.hashCode ^
         isSuperAdmin.hashCode ^
         name.hashCode ^
         role.hashCode;

@@ -31,6 +31,11 @@ class Repository {
   }) async =>
       await _firestore.login(email: email, password: password);
 
+  Future<void> addUser(UserData userData) async => _firestore.addUser(userData);
+
+  Future<void> updateUser(UserData userData, String email) async =>
+      _firestore.updateUser(userData, email);
+
   // Notifications Services
   Future<void> initNotifications() async => await _notifications.init();
 

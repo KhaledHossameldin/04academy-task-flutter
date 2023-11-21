@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../constants/routes.dart';
 import '../../cubits/login/login_cubit.dart';
 import '../../cubits/users/users_cubit.dart';
+import '../../utilities/extensions.dart';
 import '../widgets/reload_button.dart';
 
 class AdminScreen extends StatefulWidget {
@@ -13,6 +15,8 @@ class AdminScreen extends StatefulWidget {
 }
 
 class _AdminScreenState extends State<AdminScreen> {
+  final _routes = Routes.instance;
+
   @override
   void initState() {
     final isSuperAdmin =
@@ -26,7 +30,25 @@ class _AdminScreenState extends State<AdminScreen> {
     final isSuperAdmin =
         context.read<LoginCubit>().userData?.isSuperAdmin ?? false;
     return Scaffold(
-      appBar: AppBar(title: const Text('Admin Screen')),
+      appBar: AppBar(
+        title: const Text('Admin Screen'),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final shouldReload = await Navigator.pushNamed<bool>(
+                    context,
+                    _routes.userDetails,
+                  ) ??
+                  false;
+              if (!context.mounted) return;
+              if (shouldReload) {
+                context.read<UsersCubit>().fetch(withAdmins: isSuperAdmin);
+              }
+            },
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
       body: BlocBuilder<UsersCubit, UsersState>(
         builder: (context, state) {
           switch (state.runtimeType) {
@@ -36,23 +58,46 @@ class _AdminScreenState extends State<AdminScreen> {
             case UsersLoaded:
               final users = (state as UsersLoaded).users;
               return SingleChildScrollView(
-                child: DataTable(
-                  columns: const [
-                    DataColumn(label: Text('ID')),
-                    DataColumn(label: Text('Name')),
-                    DataColumn(label: Text('Email')),
-                    DataColumn(label: Text('Role')),
-                  ],
-                  rows: users
-                      .map((user) => DataRow(cells: [
-                            DataCell(Text(user.id.toString())),
-                            DataCell(Text(user.name)),
-                            DataCell(Text(user.email)),
-                            DataCell(Text(
-                              '${user.isSuperAdmin ? 'super ' : ''}${user.role.name}',
-                            )),
-                          ]))
-                      .toList(),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: DataTable(
+                    columns: const [
+                      DataColumn(label: Text('Name')),
+                      DataColumn(label: Text('Email')),
+                      DataColumn(label: Text('Role')),
+                    ],
+                    rows: users
+                        .map((user) => DataRow(cells: [
+                              DataCell(
+                                Text(user.name),
+                                onTap: () async {
+                                  if (user.isSuperAdmin && !isSuperAdmin) {
+                                    'Cannot change Super Admin info'
+                                        .showSnackbar(context, isError: true);
+                                    return;
+                                  }
+                                  final shouldReload =
+                                      await Navigator.pushNamed<bool>(
+                                            context,
+                                            _routes.userDetails,
+                                            arguments: user,
+                                          ) ??
+                                          false;
+                                  if (!context.mounted) return;
+                                  if (shouldReload) {
+                                    context
+                                        .read<UsersCubit>()
+                                        .fetch(withAdmins: isSuperAdmin);
+                                  }
+                                },
+                              ),
+                              DataCell(Text(user.email)),
+                              DataCell(Text(
+                                '${user.isSuperAdmin ? 'super ' : ''}${user.role.name}',
+                              )),
+                            ]))
+                        .toList(),
+                  ),
                 ),
               );
 

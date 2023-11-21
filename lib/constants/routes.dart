@@ -10,4 +10,5 @@ class Routes {
   final login = '/login-screen';
   final user = '/user-screen';
   final admin = '/admin-screen';
+  final userDetails = '/user-details-screen';
 }
