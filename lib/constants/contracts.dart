@@ -6,4 +6,7 @@ class Contracts {
 
   final name = 'name';
   final role = 'role';
+  final email = 'email';
+  final password = 'password';
+  final isSuperAdmin = 'isSuperAdmin';
 }
