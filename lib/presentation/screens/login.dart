@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../constants/routes.dart';
 import '../../cubits/login/login_cubit.dart';
+import '../../data/enums/user_role.dart';
 import '../../utilities/extensions.dart';
 import '../../utilities/validators.dart';
 
@@ -147,10 +148,13 @@ class _LoginButton extends StatelessWidget {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginLoaded) {
-          // I can also add the returned user to the LoginLoaded class
-          // and based on the user role I can navigate to a different
-          // screen
-          Navigator.pushReplacementNamed(context, _routes.home);
+          // This if statement decides whether to navigate to user screen or
+          // admin screen based on if the user is an admin or not
+          if (state.userData.role == UserRole.admin) {
+            Navigator.pushReplacementNamed(context, _routes.admin);
+            return;
+          }
+          Navigator.pushReplacementNamed(context, _routes.user);
           return;
         }
         if (state is LoginError) {

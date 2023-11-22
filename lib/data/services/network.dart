@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants/endpoints.dart';
@@ -43,8 +44,7 @@ class NetworkService {
             Uri.parse(url),
             headers: {
               HttpHeaders.contentTypeHeader: 'application/json',
-              HttpHeaders.authorizationHeader:
-                  'key=AAAAM74lcRs:APA91bFVyQ-wMuM0nVTcD9ngsET04hYUGYd97-OSrtlGHg3wGBJs0FNfWF7eJ1yWchmI0k86dw6evP2kSxwGbX5vFrFBEQXYuhL_7FvAqJ9oHvQJc-r59Fx1D9YNNrq1SSfnvHyFMNnF',
+              HttpHeaders.authorizationHeader: 'key=${dotenv.env['FCM']}',
             },
             body: json.encode(body),
           )

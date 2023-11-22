@@ -15,7 +15,8 @@ final class LoginLoading extends LoginState {
 }
 
 final class LoginLoaded extends LoginState {
-  const LoginLoaded();
+  final UserData userData;
+  const LoginLoaded(this.userData);
 }
 
 final class LoginError extends LoginState {

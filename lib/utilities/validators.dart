@@ -53,4 +53,11 @@ class Validators {
     }
     return null;
   }
+
+  String? name(String? name) {
+    if (name.isNullOrEmpty) {
+      return 'Must enter a name';
+    }
+    return null;
+  }
 }
