@@ -50,6 +50,10 @@ class FirestoreService {
   }
 
   Future<void> updateUser(UserData userData, String email) async {
+    final users = await getUsers(withAdmins: true);
+    if (users.any((element) => element.email == userData.email)) {
+      throw 'This email already exists';
+    }
     final docs = await _collection.where('email', isEqualTo: email).get();
     await _collection.doc(docs.docs[0].id).update(userData.toMap());
   }
