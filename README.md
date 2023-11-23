@@ -68,17 +68,13 @@ flutter run
 
 1. **Login:**
 
-- There are only two accounts:
-  - User:
-    - user@email.com
-    - 123456
-  - Admin:
-    - admin@email.com
-    - 123456
+- There is only one Super Admin account:
+  - super@admin.com
+  - 123456
 
 2. **Role-Based Authorization:**
 
-- The text in the Home Screen will change depending whether you logged in with a user or an admin
+- The page navigated to is based on the role of the logged in user.
 
 3. **Notifications:**
 
@@ -112,7 +108,6 @@ flutter run
 
 ## Dependencies
 
-- [Firebase Authentication](https://pub.dev/packages/firebase_auth)
 - [Firebase Firestore](https://pub.dev/packages/cloud_firestore)
 - [Firebase Cloud Messaging](https://pub.dev/packages/firebase_messaging)
 - [Flutter Local Notifications](https://pub.dev/packages/flutter_local_notifications)
